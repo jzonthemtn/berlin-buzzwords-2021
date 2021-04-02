@@ -26,14 +26,14 @@ To make this happen, I need a mapping of what is a "Christmas" movie in the judg
 Install Elasticsearch manually:
 
 ```
-https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.4.1.deb
-sudo dpkg -i elasticsearch-6.4.1.deb
+wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.8.0-amd64.deb
+sudo dpkg -i elasticsearch-7.8.0-amd64.deb
 ```
 
 Set the Elasticsearch config in `/etc/elasticsearch/elasticsearch.yml`:
 
 ```shell script
-cluster.name: haystack
+cluster.name: elasticsearch
 node.name: node-1
 path.data: /var/lib/elasticsearch
 path.logs: /var/log/elasticsearch
