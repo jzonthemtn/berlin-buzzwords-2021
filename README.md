@@ -205,4 +205,4 @@ This is most useful for ranking task, where the instances are grouped into query
 0 qid:3 6:0.2 10:0.15
 ```
 
-(From https://xgboost.readthedocs.io/en/latest/tutorials/input_format.html)=
+(From https://xgboost.readthedocs.io/en/latest/tutorials/input_format.html
