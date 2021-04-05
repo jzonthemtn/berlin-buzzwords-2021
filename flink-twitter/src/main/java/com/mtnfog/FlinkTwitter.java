@@ -2,8 +2,6 @@ package com.mtnfog;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mtnfog.ltr.XgBoost;
-import com.mtnfog.rest.LtrClient;
 import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint;
 import com.twitter.hbc.core.endpoint.StreamingEndpoint;
 import org.apache.flink.api.common.functions.FlatMapFunction;
@@ -25,13 +23,9 @@ import java.util.regex.Pattern;
 
 public class FlinkTwitter {
 
-    public static final String APPLICATION_NAME = "Haystack2020";
-    public static final String DATA_DIR = "/mtnfog/code/bitbucket/haystack2020/xgboost/";
+    public static final String APPLICATION_NAME = "BerlinBuzzwords2021";
     public static final Integer HASHTAG_LIMIT = 20;
     public static final List<String> TAGS = new ArrayList<>(Arrays.asList("CoronavirusOutbreak", "WorstWayToEndAnArgument"));
-
-    final static XgBoost xgBoost = new XgBoost();
-    final static LtrClient ltrClient = new LtrClient("http://haystack.mtnfog.com:9200");
 
     public static void main(String[] args) throws Exception {
 
@@ -52,10 +46,10 @@ public class FlinkTwitter {
         //final ParameterTool params = ParameterTool.fromArgs(args);
 
         final Properties props = new Properties();
-        props.setProperty(TwitterSource.CONSUMER_KEY, "NNRT81JcO7gjUtGN7PK2PHVF7");
-        props.setProperty(TwitterSource.CONSUMER_SECRET, "aOEYITQAzBcHOTM0vT2xoMWYJb1lGjd2xuBg0hIXlsSZfl1YGb");
-        props.setProperty(TwitterSource.TOKEN, "701916912-32wctqRCiEqOd9NzH39e9Cfc0SOdjLGMlMlRGR9o");
-        props.setProperty(TwitterSource.TOKEN_SECRET, "ixTeDq3qbapYGHfKZUYG8GsTkuYacJK1Q5K5dN8jIHsh1");
+        props.setProperty(TwitterSource.CONSUMER_KEY, System.getenv("CONSUMER_KEY"));
+        props.setProperty(TwitterSource.CONSUMER_SECRET, System.getenv("CONSUMER_SECRET"));
+        props.setProperty(TwitterSource.TOKEN, System.getenv("TOKEN"));
+        props.setProperty(TwitterSource.TOKEN_SECRET, System.getenv("TOKEN_SECRET"));
 
         final TweetFilter customFilterInitializer = new TweetFilter();
         final TwitterSource twitterSource = new TwitterSource(props);
@@ -168,17 +162,7 @@ public class FlinkTwitter {
 
             collector.collect(sortedTopN);
 
-            // TODO: Update the training data in xgboost/xgboost.txt to indicate "trending."
-            // TODO: Would it be good to represent the xgboost.txt in a database?
-
-            // Train a new LTR model using the updated training data.
-            final String modelJson = xgBoost.train(DATA_DIR);
-
-            // TODO: Upload the new model to Elasticsearch.
-            //final String result = ltrClient.uploadModel(modelJson);
-
-            System.out.println(modelJson);
-
+            // TODO: Persist the hashtags somewhere.
         }
 
     }
