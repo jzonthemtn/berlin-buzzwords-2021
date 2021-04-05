@@ -4,7 +4,14 @@
 
 `helm-charts` - Cloned from https://github.com/elastic/helm-charts.git. Cloned because have to use a custom Docker container that includes the Elasticsearch LTR plugin.
 
-## OLD NOTES -----
+## Usage
+
+1. Build the flink-twitter Docker image.
+
+
+## ----- OLD NOTES -----
+
+Stuff from here on down may not be 100% accurate.
 
 # Continuous LTR Model Training using Flink and Twitter
 
