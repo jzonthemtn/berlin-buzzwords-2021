@@ -18,3 +18,5 @@ docker run \
   --env TOKEN_SECRET=$TOKEN_SECRET \
   -it --rm jzemerick/flink-twitter:1.0
 ```
+
+This project was originally based on https://github.com/erikbeebe/flink_twitter_topN.
