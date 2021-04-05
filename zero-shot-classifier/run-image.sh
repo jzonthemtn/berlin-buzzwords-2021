@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker run -p 8080:8080 -it jzemerick/zero-shot:1.0
+docker run -p 8080:8080 -it jzemerick/bbuzz-zero-shot:1.0

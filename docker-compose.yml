@@ -1,0 +1,14 @@
+version: "3.3"
+services:
+  flink:
+    image: "jzemerick/bbuzz-flink-twitter:1.0"
+    depends_on:
+      - "redis"
+  classifier:
+    image: "jzemerick/bbuzz-zero-shot:1.0"
+    ports:
+      - "8080:8080"
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"

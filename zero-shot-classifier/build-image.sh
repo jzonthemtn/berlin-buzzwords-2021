@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -t jzemerick/zero-shot:1.0 .
+docker build -t jzemerick/bbuzz-zero-shot:1.0 .

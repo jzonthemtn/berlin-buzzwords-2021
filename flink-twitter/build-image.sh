@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -t jzemerick/flink-twitter:1.0 .
+docker build -t jzemerick/bbuzz-flink-twitter:1.0 .

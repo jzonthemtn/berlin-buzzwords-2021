@@ -1,17 +1,23 @@
 # Berlin Buzzwords 2021
 
-## Directories
-
-`flink-twitter` - Consumes Twitter stream to find trending hashtags over a rolling window. Includes a Docker image.
-
-`helm-charts` - Cloned from https://github.com/elastic/helm-charts.git. Cloned because have to use a custom Docker container that includes the Elasticsearch LTR plugin.
-
-`zero-shot-classifier` - Code and Docker image for a zero-shot classifier. Runs as a REST service.
-
 ## Usage
 
 1. Build the flink-twitter Docker image.
 2. Build the zero-shot-classifier Docker image.
+3. Run `docker-compose up`
+
+## Directories
+
+* `flink-twitter` - Consumes Twitter stream to find trending hashtags over a rolling window. Includes a Docker image.
+
+* `helm-charts` - Cloned from https://github.com/elastic/helm-charts.git. Cloned because have to use a custom Docker container that includes the Elasticsearch LTR plugin.
+
+* `zero-shot-classifier` - Code and Docker image for a zero-shot classifier. Runs as a REST service.
+
+
+
+
+
 
 ## ----- OLD NOTES -----
 
