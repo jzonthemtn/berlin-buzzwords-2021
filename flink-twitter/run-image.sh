@@ -1,10 +1,8 @@
 #!/bin/bash
 
-#CONSUMER_KEY=""
-#CONSUMER_SECRET=""
-#TOKEN=""
-#TOKEN_SECRET=""
-#REDIS_HOST=""
+. ../twitter.env
+
+REDIS_HOST="redis"
 
 docker run \
   --env CONSUMER_KEY=$CONSUMER_KEY \

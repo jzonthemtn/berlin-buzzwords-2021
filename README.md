@@ -2,8 +2,16 @@
 
 ## Usage
 
-1. Build the flink-twitter Docker image.
-2. Build the zero-shot-classifier Docker image.
+1. Run `docker-compose build`
+2. Create a `twitter.env` file with your Twitter credentials like:
+
+```
+CONSUMER_KEY=
+CONSUMER_SECRET=
+TOKEN=
+TOKEN_SECRET=
+```
+
 3. Run `docker-compose up`
 
 ## Directories

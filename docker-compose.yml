@@ -3,6 +3,8 @@ services:
   flink:
     build: ./flink-twitter/
     #image: "jzemerick/bbuzz-flink-twitter:1.0"
+    env_file:
+      - twitter.env
     environment:
       - REDIS_HOST=redis
     depends_on:
@@ -12,11 +14,11 @@ services:
     #image: "jzemerick/bbuzz-zero-shot:1.0"
     ports:
       - "8080:8080"
-  elasticsearch:
-    build: ./elasticsearch-ltr/
+#  elasticsearch:
+#    build: ./elasticsearch-ltr/
     #image: "jzemerick/elasticsearch-ltr:7.8.0"
-    ports:
-      - "9200:9200"
+#    ports:
+#      - "9200:9200"
   redis:
     image: "redis:alpine"
     ports:
