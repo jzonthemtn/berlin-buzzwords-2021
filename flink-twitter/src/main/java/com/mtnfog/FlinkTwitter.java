@@ -26,13 +26,13 @@ import java.util.regex.Pattern;
 public class FlinkTwitter {
 
     public static final String APPLICATION_NAME = "flink-twitter";
+    public static final String REDIS_KEY = "hashtags";
     public static final Integer HASHTAG_LIMIT = 20;
 
     private static Jedis jedis;
 
     public static void main(String[] args) throws Exception {
 
-        // Configure connection to Redis.
         final String redisHost = System.getenv("REDIS_HOST");
         jedis = new Jedis(redisHost);
 
@@ -43,15 +43,14 @@ public class FlinkTwitter {
         env.enableCheckpointing(60000);
         env.setRestartStrategy(RestartStrategies.fixedDelayRestart(0, 500L));
 
-        final Properties props = new Properties();
-        props.setProperty(TwitterSource.CONSUMER_KEY, System.getenv("CONSUMER_KEY"));
-        props.setProperty(TwitterSource.CONSUMER_SECRET, System.getenv("CONSUMER_SECRET"));
-        props.setProperty(TwitterSource.TOKEN, System.getenv("TOKEN"));
-        props.setProperty(TwitterSource.TOKEN_SECRET, System.getenv("TOKEN_SECRET"));
+        final Properties properties = new Properties();
+        properties.setProperty(TwitterSource.CONSUMER_KEY, System.getenv("CONSUMER_KEY"));
+        properties.setProperty(TwitterSource.CONSUMER_SECRET, System.getenv("CONSUMER_SECRET"));
+        properties.setProperty(TwitterSource.TOKEN, System.getenv("TOKEN"));
+        properties.setProperty(TwitterSource.TOKEN_SECRET, System.getenv("TOKEN_SECRET"));
 
-        final TweetFilter customFilterInitializer = new TweetFilter();
-        final TwitterSource twitterSource = new TwitterSource(props);
-        twitterSource.setCustomEndpointInitializer(customFilterInitializer);
+        final TwitterSource twitterSource = new TwitterSource(properties);
+        twitterSource.setCustomEndpointInitializer(new TweetFilter());
 
         final DataStream<String> streamSource = env.addSource(twitterSource);
         final DataStream<Tuple2<String, Integer>> jsonTweets = streamSource.flatMap(new TweetFlatMapper()).keyBy(0);
@@ -62,8 +61,7 @@ public class FlinkTwitter {
         final DataStream<LinkedHashMap<String, Integer>> ds = jsonTweets
                 .timeWindowAll(Time.seconds(windowSize), Time.seconds(slide))
                 .apply(new MostPopularTags());
-
-        // Print to stdout
+        
         ds.print();
 
         env.execute(APPLICATION_NAME);
@@ -94,10 +92,10 @@ public class FlinkTwitter {
     private static class TweetFlatMapper implements FlatMapFunction<String, Tuple2<String, Integer>> {
 
         @Override
-        public void flatMap(String tweet, Collector<Tuple2<String, Integer>> out) throws Exception {
+        public void flatMap(String tweet, Collector<Tuple2<String, Integer>> out) {
 
             final ObjectMapper mapper = new ObjectMapper();
-            String tweetString = null;
+            final String tweetString;
 
             final Pattern p = Pattern.compile("#\\w+");
 
@@ -106,25 +104,24 @@ public class FlinkTwitter {
                 final JsonNode jsonNode = mapper.readValue(tweet, JsonNode.class);
                 tweetString = jsonNode.get("text").textValue();
 
-            } catch (Exception e) {
-                // That's ok
-            }
+                if (tweetString != null) {
 
-            if (tweetString != null) {
+                    final Matcher matcher = p.matcher(tweetString);
 
-                final List<String> tags = new ArrayList<>();
-                final Matcher matcher = p.matcher(tweetString);
+                    while (matcher.find()) {
 
-                while (matcher.find()) {
+                        final String cleanedHashtag = matcher.group(0).trim();
 
-                    final String cleanedHashtag = matcher.group(0).trim();
+                        if (cleanedHashtag != null) {
+                            out.collect(new Tuple2<>(cleanedHashtag, 1));
+                        }
 
-                    if (cleanedHashtag != null) {
-                        out.collect(new Tuple2<>(cleanedHashtag, 1));
                     }
 
                 }
 
+            } catch (Exception e) {
+                // The tweet couldn't be parsed. Just ignore the exception.
             }
 
         }
@@ -163,8 +160,8 @@ public class FlinkTwitter {
 
             collector.collect(sortedTopN);
 
-            // Persist the hashtags to Redis.
-            sortedTopN.entrySet().forEach(hashtag -> jedis.zadd("hashtags", hashtag.getValue(), hashtag.getKey()));
+            // Persist the top-N hashtags to Redis.
+            sortedTopN.entrySet().forEach(hashtag -> jedis.zadd(REDIS_KEY, hashtag.getValue(), hashtag.getKey()));
 
             for(final String hashtag : sortedTopN.keySet()) {
                 System.out.println(hashtag + " = " + sortedTopN.get(hashtag));
