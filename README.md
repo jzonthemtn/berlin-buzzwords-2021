@@ -16,7 +16,9 @@
 
 * `zero-shot-classifier` - Code and Docker image for a zero-shot classifier. Runs as a REST service.
 
+## Architecture
 
+![Architecture](https://github.com/jzonthemtn/berlin-buzzwords-2021/blob/master/resources/arch.png?raw=true)
 
 
 
