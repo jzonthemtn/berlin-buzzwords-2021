@@ -12,7 +12,7 @@
 
 * `helm-charts` - Cloned from https://github.com/elastic/helm-charts.git. Cloned because have to use a custom Docker container that includes the Elasticsearch LTR plugin.
 
-* `learning-to-rank` - Code to train the learning-to-rank model.
+* `learning-to-rank` - Scripts to work with learning-to-rank models.
 
 * `zero-shot-classifier` - Code and Docker image for a zero-shot classifier. Runs as a REST service.
 
