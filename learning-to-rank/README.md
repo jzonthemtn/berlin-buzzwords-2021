@@ -1,19 +1,6 @@
-Stuff in here may not be 100% accurate.
+# Working with Learning-to-Rank Models in Elasticsearch
 
-# Continuous LTR Model Training using Flink and Twitter
-
-* Twitter trending hashtags: https://github.com/erikbeebe/flink_twitter_topN
 * XgBoost training modeled after: https://github.com/o19s/elasticsearch-learning-to-rank/blob/master/demo/xgboost-demo/xgb.py
-
-## Goal
-
-1. User searches for "Family" movies.
-2. Gets back a list of "Family" (`genres`) movies.
-3. "Christmas" becomes a trending topic on Twitter.
-4. User searches for "Family" movies.
-5. Gets back a list of "Family" movies but with Christmas movies at the top.
-
-To make this happen, I need a mapping of what is a "Christmas" movie in the judgments file.
 
 ## Elasticsearch
 
