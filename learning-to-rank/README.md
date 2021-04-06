@@ -1,30 +1,3 @@
-# Berlin Buzzwords 2021
-
-## Usage
-
-1. Build the flink-twitter Docker image.
-2. Build the zero-shot-classifier Docker image.
-3. Run `docker-compose up`
-
-## Directories
-
-* `flink-twitter` - Consumes Twitter stream to find trending hashtags over a rolling window. Includes a Docker image.
-
-* `helm-charts` - Cloned from https://github.com/elastic/helm-charts.git. Cloned because have to use a custom Docker container that includes the Elasticsearch LTR plugin.
-
-* `learning-to-rank` - Code to train the learning-to-rank model.
-
-* `zero-shot-classifier` - Code and Docker image for a zero-shot classifier. Runs as a REST service.
-
-
-
-
-
-
-## ----- OLD NOTES -----
-
-Stuff from here on down may not be 100% accurate.
-
 # Continuous LTR Model Training using Flink and Twitter
 
 * Twitter trending hashtags: https://github.com/erikbeebe/flink_twitter_topN
@@ -45,14 +18,14 @@ To make this happen, I need a mapping of what is a "Christmas" movie in the judg
 Install Elasticsearch manually:
 
 ```
-wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.8.0-amd64.deb
-sudo dpkg -i elasticsearch-7.8.0-amd64.deb
+https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.4.1.deb
+sudo dpkg -i elasticsearch-6.4.1.deb
 ```
 
 Set the Elasticsearch config in `/etc/elasticsearch/elasticsearch.yml`:
 
 ```shell script
-cluster.name: elasticsearch
+cluster.name: haystack
 node.name: node-1
 path.data: /var/lib/elasticsearch
 path.logs: /var/log/elasticsearch
@@ -62,8 +35,8 @@ network.host: 0.0.0.0
 Configure the service:
 
 ```shell script
-sudo systemctl enable elasticsearch.service
-sudo systemctl start elasticsearch.service
+sudo systemctl enable elasticsearch.service 
+sudo systemctl start elasticsearch.service 
 ```
 
 Now install the Elasticsearch LTR plugin:
@@ -126,15 +99,15 @@ from ltr import setup
 setup(client, config=config, index='tmdb', featureset='release')
 
 from ltr import years_as_ratings
-years_as_ratings.synthesize(client,
+years_as_ratings.synthesize(client, 
                             featureSet='release',
                             classicTrainingSetOut='data/classic-training.txt',
                             latestTrainingSetOut='data/latest-training.txt')
 
 from ltr import train
-train(client, trainingInFile='data/latest-training.txt',
+train(client, trainingInFile='data/latest-training.txt', 
       index='tmdb', featureSet='release', modelName='latest')
-train(client, trainingInFile='data/classic-training.txt',
+train(client, trainingInFile='data/classic-training.txt', 
       index='tmdb', featureSet='release', modelName='classic')
 
 from ltr.release_date_plot import plot
@@ -224,4 +197,4 @@ This is most useful for ranking task, where the instances are grouped into query
 0 qid:3 6:0.2 10:0.15
 ```
 
-(From https://xgboost.readthedocs.io/en/latest/tutorials/input_format.html
+(From https://xgboost.readthedocs.io/en/latest/tutorials/input_format.html)=
