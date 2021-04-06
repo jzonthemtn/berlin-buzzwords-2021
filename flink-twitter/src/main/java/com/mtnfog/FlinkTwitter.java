@@ -2,6 +2,7 @@ package com.mtnfog;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.twitter.hbc.core.endpoint.Location;
 import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint;
 import com.twitter.hbc.core.endpoint.StreamingEndpoint;
 import org.apache.flink.api.common.functions.FlatMapFunction;
@@ -15,6 +16,7 @@ import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.streaming.connectors.twitter.TwitterSource;
 import org.apache.flink.util.Collector;
+import redis.clients.jedis.Jedis;
 
 import java.io.Serializable;
 import java.util.*;
@@ -23,27 +25,23 @@ import java.util.regex.Pattern;
 
 public class FlinkTwitter {
 
-    public static final String APPLICATION_NAME = "BerlinBuzzwords2021";
+    public static final String APPLICATION_NAME = "flink-twitter";
     public static final Integer HASHTAG_LIMIT = 20;
-    public static final List<String> TAGS = new ArrayList<>(Arrays.asList("CoronavirusOutbreak", "WorstWayToEndAnArgument"));
+
+    private static Jedis jedis;
 
     public static void main(String[] args) throws Exception {
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironment();
+        // Configure connection to Redis.
+        final String redisHost = System.getenv("REDIS_HOST");
+        jedis = new Jedis(redisHost);
 
-        // enable event time processing
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironment();
         env.setStreamTimeCharacteristic(TimeCharacteristic.ProcessingTime);
         env.getConfig().setAutoWatermarkInterval(1000L);
         env.setParallelism(1);
-
-        // enable fault-tolerance, 60s checkpointing
         env.enableCheckpointing(60000);
-
-        // enable restarts
         env.setRestartStrategy(RestartStrategies.fixedDelayRestart(0, 500L));
-
-        // Get parameters from command line
-        //final ParameterTool params = ParameterTool.fromArgs(args);
 
         final Properties props = new Properties();
         props.setProperty(TwitterSource.CONSUMER_KEY, System.getenv("CONSUMER_KEY"));
@@ -56,13 +54,10 @@ public class FlinkTwitter {
         twitterSource.setCustomEndpointInitializer(customFilterInitializer);
 
         final DataStream<String> streamSource = env.addSource(twitterSource);
-
-        // Parse JSON tweets, flatmap and emit keyed stream
         final DataStream<Tuple2<String, Integer>> jsonTweets = streamSource.flatMap(new TweetFlatMapper()).keyBy(0);
 
-        // Ordered topN list of most popular hashtags
-        final int windowSize = 300;
-        final int slide = 10;
+        final int windowSize = 1800;    // 1800 seconds (30 minutes)
+        final int slide = 10;           // 10 seconds window slide
 
         final DataStream<LinkedHashMap<String, Integer>> ds = jsonTweets
                 .timeWindowAll(Time.seconds(windowSize), Time.seconds(slide))
@@ -81,7 +76,14 @@ public class FlinkTwitter {
         public StreamingEndpoint createEndpoint() {
 
             final StatusesFilterEndpoint endpoint = new StatusesFilterEndpoint();
-            endpoint.trackTerms(TAGS);
+
+            // Coordinates encompassing the continental USA.
+            endpoint.locations(Arrays.asList(
+                    new Location(
+                            new Location.Coordinate(-124.907795, 22.818606),
+                            new Location.Coordinate(-61.147766, 46.659353)
+                    )
+            ));
 
             return endpoint;
 
@@ -129,11 +131,10 @@ public class FlinkTwitter {
 
     }
 
-    // Window functions
     public static class MostPopularTags implements AllWindowFunction<Tuple2<String, Integer>, LinkedHashMap<String, Integer>, TimeWindow> {
 
         @Override
-        public void apply(TimeWindow window, Iterable<Tuple2<String, Integer>> tweets, Collector<LinkedHashMap<String, Integer>> collector) throws Exception {
+        public void apply(TimeWindow window, Iterable<Tuple2<String, Integer>> tweets, Collector<LinkedHashMap<String, Integer>> collector) {
 
             final HashMap<String, Integer> hmap = new HashMap<>();
 
@@ -162,7 +163,13 @@ public class FlinkTwitter {
 
             collector.collect(sortedTopN);
 
-            // TODO: Persist the hashtags somewhere.
+            // Persist the hashtags to Redis.
+            sortedTopN.entrySet().forEach(hashtag -> jedis.zadd("hashtags", hashtag.getValue(), hashtag.getKey()));
+
+            for(final String hashtag : sortedTopN.keySet()) {
+                System.out.println(hashtag + " = " + sortedTopN.get(hashtag));
+            }
+
         }
 
     }

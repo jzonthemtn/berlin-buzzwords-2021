@@ -2,17 +2,19 @@ version: "3.3"
 services:
   flink:
     build: ./flink-twitter/
-    image: "jzemerick/bbuzz-flink-twitter:1.0"
+    #image: "jzemerick/bbuzz-flink-twitter:1.0"
+    environment:
+      - REDIS_HOST=redis
     depends_on:
       - "redis"
   classifier:
     build: ./zero-shot-classifier/
-    image: "jzemerick/bbuzz-zero-shot:1.0"
+    #image: "jzemerick/bbuzz-zero-shot:1.0"
     ports:
       - "8080:8080"
   elasticsearch:
     build: ./elasticsearch-ltr/
-    image: "jzemerick/elasticsearch-ltr:7.8.0"
+    #image: "jzemerick/elasticsearch-ltr:7.8.0"
     ports:
       - "9200:9200"
   redis:
