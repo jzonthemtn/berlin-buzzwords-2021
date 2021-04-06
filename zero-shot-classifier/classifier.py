@@ -8,12 +8,18 @@ classifier = pipeline("zero-shot-classification")
 class Classifier(object):
 
     @cherrypy.expose
+    @cherrypy.tools.json_in()
     @cherrypy.tools.json_out()
-    def classify(self, sequence):
+    def classify(self):
 
-        candidate_labels = ["politics", "public health", "economics"]
+        sequence = cherrypy.request.json['sequence']
+        candidate_labels = cherrypy.request.json['labels']
 
         return classifier(sequence, candidate_labels, multi_class=True)
+
+    @cherrypy.expose
+    def status(self):
+      return "alive"
 
 if __name__ == '__main__':
     cherrypy.config.update({'server.socket_host': '0.0.0.0', 'server.socket_port': 8080})

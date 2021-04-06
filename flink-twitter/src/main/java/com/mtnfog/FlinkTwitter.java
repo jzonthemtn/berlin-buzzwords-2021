@@ -61,7 +61,7 @@ public class FlinkTwitter {
         final DataStream<LinkedHashMap<String, Integer>> ds = jsonTweets
                 .timeWindowAll(Time.seconds(windowSize), Time.seconds(slide))
                 .apply(new MostPopularTags());
-        
+
         ds.print();
 
         env.execute(APPLICATION_NAME);
