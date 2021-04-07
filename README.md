@@ -31,6 +31,29 @@ At this point, you have the following containers running:
 
 The Apache Flink job will be running and capturing hashtags and their counts. The hashtags and their counts will be sorted and the most frequently occurring hashtags and their counts will be persisted to the Redis cache.
 
+## TODO
+
+Now we need to read the hashtags from Redis and use those as candidate categories for the zero-shot classifier. The text being classified will be the `overview` for each indexed movie document. The confidence values will be used as a feature value to train the model.
+
+An example being:
+
+```
+4 qid:1 1:90.584847
+3 qid:1 1:75.695847
+```
+
+The query id `1` corresponds to the `christmas` query.
+
+Use this judgments file to train an xgboost model. Upload the model to Elasticsearch. Run a `family` search and see that the movie search results are now ranked based on the trending hashtags, e.g. `christmas`.
+
+Resources:
+
+* https://xgboost.readthedocs.io/en/latest/tutorials/input_format.html
+* https://elasticsearch-learning-to-rank.readthedocs.io/en/latest/core-concepts.html
+
+### Open Questions
+
+
 ## Architecture
 
 ![Architecture](https://github.com/jzonthemtn/berlin-buzzwords-2021/blob/master/resources/arch.png?raw=true)
