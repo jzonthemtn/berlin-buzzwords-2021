@@ -13,6 +13,13 @@ TOKEN_SECRET=
 ```
 
 3. Run `docker-compose up`
+4. Index movies into Elasticsearch:
+
+```
+cd data/es-tmdb/
+./index.sh
+```
+
 
 ## Directories
 
