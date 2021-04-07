@@ -20,16 +20,16 @@ cd data/es-tmdb/
 ./index.sh
 ```
 
+To see some indexed documents run: `./scripts/query.sh`
 
-## Directories
+At this point, you have the following containers running:
 
-* `flink-twitter` - Consumes Twitter stream to find trending hashtags over a rolling window. Includes a Docker image.
+* `flink-twitter` - Capturing counts of hashtags and persisting those counts in Redis.
+* `elasticsearch` - Elasticsearch with indexed movie documents.
+* `classifier` - A zero-shot learning classifier exposed through a REST service.
+* `redis` - Cache for storing hashtags and counts.
 
-* `helm-charts` - Cloned from https://github.com/elastic/helm-charts.git. Cloned because have to use a custom Docker container that includes the Elasticsearch LTR plugin.
-
-* `learning-to-rank` - Scripts to work with learning-to-rank models.
-
-* `zero-shot-classifier` - Code and Docker image for a zero-shot classifier. Runs as a REST service.
+The Apache Flink job will be running and capturing hashtags and their counts. The hashtags and their counts will be sorted and the most frequently occurring hashtags and their counts will be persisted to the Redis cache.
 
 ## Architecture
 
