@@ -2,17 +2,46 @@
 
 HOST="${1:-localhost}"
 INDEX="${2:-tmdb}"
-DOC_ID="${2:-43004}"
 CATEGORY="christmas"
 
-CONFIDENCE=`curl -s -X POST http://localhost:8080/classify -d '{"sequence": "I want a cheeseburger.", "labels": ["christmas"]}' -H "Content-Type: application/json" | jq .scores[0]`
-
-echo "Updating document $DOC_ID for category $CATEGORY with value $CONFIDENCE"
-
-read -r -d '' BODY << EOM
+# Get all the indexed document IDs.
+LINE=`curl -s http://$HOST:9200/$INDEX/_search?pretty=true -H "Content-Type: application/json" -d '
 {
-  "script" : "ctx._source.classification_$CATEGORY = '$CONFIDENCE'"
+    "from": 0,
+    "size": 10000,
+    "query" : {
+        "match_all" : {}
+    },
+    "stored_fields": []
 }
-EOM
+' | jq -r '.hits.hits[]._id'   | tr '\n' ' '`
 
-curl -s -X POST "http://$HOST:9200/$INDEX/_update/$DOC_ID" -H "Content-Type: application/json" --data "$BODY" | jq
+IDS=($LINE)
+
+#echo "Document IDs:"
+#printf '%s\n' "${IDS[@]}"
+
+i=0
+
+for DOC_ID in "${IDS[@]}"
+do
+
+  echo "Classifying document ID $DOC_ID..."
+
+  # Get the document text.
+  OVERVIEW=`curl -s -X POST http://$HOST:9200/$INDEX/_search -H "Content-Type: application/json; charset=utf-8" --data "{\"query\":{ \"ids\":{ \"values\": [ $DOC_ID ] } } }" | jq -r .hits.hits[0]._source.overview`
+  echo "Overview: $OVERVIEW"
+
+  # Get the classification score for the document.
+  CONFIDENCE=`curl -s -X POST http://localhost:8080/classify -d "{\"sequence\": \"$OVERVIEW\", \"labels\": [\"$CATEGORY\"]}" -H "Content-Type: application/json" | jq .scores[0]`
+  echo "Confidence: $CATEGORY = $CONFIDENCE"
+
+  echo "Updating document $DOC_ID for category $CATEGORY with value $CONFIDENCE"
+  curl -s -X POST "http://$HOST:9200/$INDEX/_update/$DOC_ID" -H "Content-Type: application/json" --data "{\"script\" : \"ctx._source.classification_$CATEGORY = '$CONFIDENCE'\"}" > /dev/null
+
+  echo "============================================="
+  echo "$i of ${#IDS[@]}"
+  ((i=i+1))
+  echo "============================================="
+
+done
