@@ -3,7 +3,8 @@ import json
 from transformers import pipeline
 
 
-classifier = pipeline("zero-shot-classification")
+# distilbert-base-uncased-finetuned-mnli
+classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
 
 class Classifier(object):
 
