@@ -2,6 +2,8 @@
 
 ## Usage
 
+In the commands below, `localhost` is where Elasticsearch is running and `tmdb` is the name of the index.
+
 1. Run `docker-compose build`
 2. Create a `twitter.env` file with your Twitter credentials like:
 
@@ -17,7 +19,7 @@ TOKEN_SECRET=
 
 ```
 cd data/
-./index.sh localhost
+./index.sh localhost tmdb
 ```
 
 To see some indexed documents run: `./scripts/query.sh`
@@ -33,7 +35,7 @@ The Apache Flink job will be running and capturing hashtags and their counts. Th
 
 **This step needs implemented ----->** Read the trending hashtags from Redis.
 
-Now, update the indexed documents (movies) with a field (`classification_hashtag`) holding the classifier's score for the hashtag. In the example commands below, the hashtag is `christmas`.
+Now, update the indexed documents with a field (`classification_hashtag`) holding the classifier's score for the hashtag. In the example commands below, the hashtag is `christmas`.
 
 ```
 cd data/
