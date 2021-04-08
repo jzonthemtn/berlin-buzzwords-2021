@@ -14,7 +14,7 @@ LINE=`curl -s http://$HOST:9200/$INDEX/_search?pretty=true -H "Content-Type: app
     },
     "stored_fields": []
 }
-' | jq -r '.hits.hits[]._id'   | tr '\n' ' '`
+' | jq -r '.hits.hits[]._id' | tr '\n' ' '`
 
 IDS=($LINE)
 
@@ -37,7 +37,7 @@ do
   echo "Confidence: $CATEGORY = $CONFIDENCE"
 
   echo "Updating document $DOC_ID for category $CATEGORY with value $CONFIDENCE"
-  curl -s -X POST "http://$HOST:9200/$INDEX/_update/$DOC_ID" -H "Content-Type: application/json" --data "{\"script\" : \"ctx._source.classification_$CATEGORY = '$CONFIDENCE'\"}" > /dev/null
+  curl -s -X POST "http://$HOST:9200/$INDEX/_update/$DOC_ID" -H "Content-Type: application/json" --data "{\"script\" : \"ctx._source.classification_$CATEGORY = $CONFIDENCE\"}" > /dev/null
 
   echo "============================================="
   echo "$i of ${#IDS[@]}"

@@ -1,4 +1,0 @@
-0 na q
-1 tmdb_title q
-2 tmdb_body q
-3 tmdb_christmas i

@@ -1,6 +1,7 @@
 #!/bin/bash
 HOST="${1:-localhost}"
 INDEX="${2:-tmdb}"
+TERM="${2:-christmas}"
 
 # Shrek / Christmas
 
