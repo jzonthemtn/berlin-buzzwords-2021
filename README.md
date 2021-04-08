@@ -31,17 +31,16 @@ At this point, you have the following containers running:
 
 The Apache Flink job will be running and capturing hashtags and their counts. The hashtags and their counts will be sorted and the most frequently occurring hashtags and their counts will be persisted to the Redis cache.
 
-Now (TODO):
+**TODO*** - Read the trending hashtags from Redis.
 
-* Read the trending hashtags from Redis.
-* Update the indexed documents (movies) with a field (`classification_hashtag`) holding the classifier's score for the hashtag:
+Update the indexed documents (movies) with a field (`classification_hashtag`) holding the classifier's score for the hashtag. In the example commands below, the hashtag is `christmas`.
 
 ```
 cd data/
 ./update.sh localhost tmdb christmas
 ```
 
-* Searches can now be sorted descending by the `classification_hashtag` field.
+Searches can now be sorted descending by the `classification_christmas` field.
 
 ```
 ./scripts/query-sort-by-classification.sh localhost tmdb christmas
