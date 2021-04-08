@@ -31,9 +31,9 @@ At this point, you have the following containers running:
 
 The Apache Flink job will be running and capturing hashtags and their counts. The hashtags and their counts will be sorted and the most frequently occurring hashtags and their counts will be persisted to the Redis cache.
 
-**TODO*** - Read the trending hashtags from Redis.
+**This step needs implemented ----->** Read the trending hashtags from Redis.
 
-Update the indexed documents (movies) with a field (`classification_hashtag`) holding the classifier's score for the hashtag. In the example commands below, the hashtag is `christmas`.
+Now, update the indexed documents (movies) with a field (`classification_hashtag`) holding the classifier's score for the hashtag. In the example commands below, the hashtag is `christmas`.
 
 ```
 cd data/
