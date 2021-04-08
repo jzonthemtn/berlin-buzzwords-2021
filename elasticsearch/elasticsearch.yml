@@ -3,3 +3,4 @@ http.cors.enabled: true
 indices.query.bool.max_clause_count: 10240
 network.host: 0.0.0.0
 discovery.type: single-node
+script.max_compilations_rate: 5000/1m

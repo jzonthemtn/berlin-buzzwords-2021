@@ -12,23 +12,7 @@ read -r -d '' BODY << EOM
         "order" : "desc"
       }
     }
-  ],
-  "query": {
-    "bool": {
-      "must": [
-        {
-          "match": {
-            "genres": "Family"
-          }
-        },
-        {
-          "match": {
-            "overview": "$TERM"
-          }
-        }
-      ]
-    }
-  }
+  ]
 }
 EOM
 
