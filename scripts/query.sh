@@ -1,5 +1,6 @@
 #!/bin/bash
 HOST="${1:-localhost}"
+INDEX="${2:-tmdb}"
 
 # Shrek / Christmas
 
@@ -14,7 +15,7 @@ HOST="${1:-localhost}"
 #}
 #' | jq
 
-curl -s -X POST http://$HOST:9200/tmdb/_search -H "Content-Type: application/json; charset=utf-8" -d'
+curl -s -X POST http://$HOST:9200/$INDEX/_search -H "Content-Type: application/json; charset=utf-8" -d'
 {
   "query": {
     "bool": {
