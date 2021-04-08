@@ -12,8 +12,32 @@ read -r -d '' BODY << EOM
         "order" : "desc"
       }
     }
-  ]
+  ],
+  "query": {
+    "match": {
+      "genres": "Family"
+    }
+  }
 }
 EOM
 
 curl -s -X POST http://$HOST:9200/$INDEX/_search -H "Content-Type: application/json; charset=utf-8" --data "$BODY" | jq
+
+
+#,
+#  "query": {
+#    "bool": {
+#      "must": [
+#        {
+#          "match": {
+#            "genres": "Family"
+#          }
+#        },
+#        {
+#          "match": {
+#            "overview": "$TERM"
+#          }
+#        }
+#      ]
+#    }
+#  }
