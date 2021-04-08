@@ -22,12 +22,12 @@ cd data/
 ./index.sh localhost tmdb
 ```
 
-To see some indexed documents run: `./scripts/query.sh`
+To see some indexed documents run: `./data/query.sh`
 
 At this point, you have the following containers running:
 
 * `flink-twitter` - Capturing counts of hashtags and persisting those counts in Redis.
-* `elasticsearch` - Elasticsearch (with unused Learning-to-rank plugin).
+* `elasticsearch` - Elasticsearch.
 * `classifier` - A zero-shot learning classifier exposed through a REST service.
 * `redis` - Cache for storing hashtags and counts.
 
@@ -45,7 +45,7 @@ cd data/
 Searches can now be sorted descending by the `classification_christmas` field.
 
 ```
-./scripts/query-sort-by-classification.sh localhost tmdb christmas
+./data/query-sort-by-classification.sh localhost tmdb christmas
 ```
 
 ## Architecture
