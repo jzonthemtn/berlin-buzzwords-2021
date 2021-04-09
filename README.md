@@ -1,5 +1,9 @@
 # Berlin Buzzwords 2021
 
+## Architecture
+
+![Architecture](https://github.com/jzonthemtn/berlin-buzzwords-2021/blob/master/resources/arch.png?raw=true)
+
 ## Usage
 
 In the commands below, `localhost` is where Elasticsearch is running and `tmdb` is the name of the index.
@@ -37,6 +41,8 @@ The Apache Flink job will be running and capturing hashtags and their counts. Th
 
 Now, update the indexed documents with a field (`classification_hashtag`) holding the classifier's score for the hashtag. In the example commands below, the hashtag is `christmas`.
 
+**This step needs implemented ----->** Train the MNLI model.
+
 ```
 cd data/
 ./update.sh localhost tmdb christmas
@@ -47,7 +53,3 @@ Searches can now be sorted descending by the `classification_christmas` field.
 ```
 ./data/query-sort-by-classification.sh localhost tmdb christmas
 ```
-
-## Architecture
-
-![Architecture](https://github.com/jzonthemtn/berlin-buzzwords-2021/blob/master/resources/arch.png?raw=true)
