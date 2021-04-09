@@ -2,7 +2,7 @@
 
 TASK_NAME="MNLI"
 
-python3 ./examples/text-classification/run_glue.py \
+python3 /tmp/transformers/examples/text-classification/run_glue.py \
   --model_name_or_path bert-base-cased \
   --task_name $TASK_NAME \
   --do_train \
