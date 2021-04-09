@@ -47,8 +47,6 @@ The Apache Flink job will be running and capturing hashtags and their counts. Th
 
 Now, update the indexed documents with a field (`classification_hashtag`) holding the classifier's score for the hashtag. In the example commands below, the hashtag is `christmas`.
 
-**This step needs implemented ----->** Train the MNLI model.
-
 ```
 cd data/
 ./update.sh localhost tmdb christmas
@@ -59,3 +57,19 @@ Searches can now be sorted descending by the `classification_christmas` field.
 ```
 ./data/query-sort-by-classification.sh localhost tmdb christmas
 ```
+
+### Model Training
+
+The `nli` directory contains files needed to fine-tune a NLI model on BERT using the MNLI dataset. If you want to change the parameters of the training modify the `train.sh` script. Change to the `nli` directory and build the docker image.
+
+```
+docker build -t jzemerick/nli:1.0 .
+```
+
+Now run the docker image to start training.
+
+```
+docker run --rm -it -v "/tmp/models/:/models/" jzemerick/nli:1.0
+```
+
+Model artifacts will be written to `/tmp/models`.
