@@ -1,6 +1,7 @@
 FROM ubuntu:20.04
 
-RUN apt-get update && apt-get -y install python3 curl build-essential
+RUN apt-get update && apt-get -y install python3 python3-pip
+RUN apt-get -y install git build-essential
 
 RUN python3 -m pip install git+https://github.com/huggingface/transformers
 RUN python3 -m pip install wheel datasets torch scipy sklearn
