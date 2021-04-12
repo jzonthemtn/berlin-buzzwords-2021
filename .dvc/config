@@ -1,2 +1,4 @@
-['remote "gdrive"']
-    url = gdrive://1L147eaF7LJ9zZxfgcqlzn7VmcId6tGpw
+[core]
+    remote = unraid
+['remote "unraid"']
+    url = ssh://jeff@192.168.1.17/unraid/mtnfog/models/berlin-buzzwords-2021/
