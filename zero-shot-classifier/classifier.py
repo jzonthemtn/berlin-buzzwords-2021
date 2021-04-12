@@ -4,7 +4,9 @@ from transformers import pipeline
 
 
 # distilbert-base-uncased-finetuned-mnli
-classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
+#classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
+classifier = pipeline("zero-shot-classification", model="/home/jeff/berlin-buzzwords-2021/nli/models/MNLI/")
+
 
 class Classifier(object):
 

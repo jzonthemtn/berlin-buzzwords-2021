@@ -10,5 +10,6 @@ python3 /tmp/transformers/examples/text-classification/run_glue.py \
   --max_seq_length 128 \
   --per_gpu_train_batch_size 32 \
   --learning_rate 2e-5 \
-  --num_train_epochs 3.0 \
-  --output_dir /models/$TASK_NAME/
+  --num_train_epochs 1.0 \
+  --output_dir ./models/$TASK_NAME/
+
