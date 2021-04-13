@@ -1,10 +1,14 @@
-FROM ubuntu:20.04
+FROM nvidia/cuda:11.1-devel-ubi8
 
-RUN apt-get update && apt-get -y install python3 python3-pip
-RUN apt-get -y install git build-essential
+RUN yum upgrade -y \
+        && yum install -y python38 \
+        && yum install -y python38-devel git
 
-RUN python3 -m pip install git+https://github.com/huggingface/transformers
-RUN python3 -m pip install wheel datasets torch scipy sklearn
+RUN python3.8 -m pip install --upgrade pip
+RUN python3.8 -m pip install --upgrade wheel datasets torch scipy sklearn
+RUN python3.8 -m pip install git+https://github.com/huggingface/transformers
+RUN python3.8 -m pip freeze
+RUN python3.8 --version
 
 RUN git clone https://github.com/huggingface/transformers.git /tmp/transformers
 COPY train.sh /tmp/transformers/

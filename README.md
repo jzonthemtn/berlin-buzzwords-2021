@@ -60,16 +60,6 @@ Searches can now be sorted descending by the `classification_christmas` field.
 
 ### Model Training
 
-The `nli` directory contains files needed to fine-tune a NLI model on BERT using the MNLI dataset. If you want to change the parameters of the training modify the `train.sh` script. Change to the `nli` directory and build the docker image.
+The `nli` directory contains files needed to fine-tune a NLI model on BERT using the MNLI dataset. If you want to change the parameters of the training modify the `train.sh` script. Change to the `nli` directory and run `build.sh` to build the image.
 
-```
-docker build -t jzemerick/nli:1.0 .
-```
-
-Now run the docker image to start training.
-
-```
-docker run --rm -it -v "/tmp/models/:/models/" jzemerick/nli:1.0
-```
-
-Model artifacts will be written to `/tmp/models`.
+Now run the docker image to start training using the `run.sh` script. Model artifacts will be written to `./models/`.
