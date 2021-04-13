@@ -25,14 +25,14 @@ TOKEN_SECRET=
 ```
 
 3. Run `docker-compose up`
-4. Index movies into Elasticsearch:
+4. Index movie documents in Elasticsearch:
 
 ```
 cd data/
 ./index.sh localhost tmdb
 ```
 
-To see some indexed documents run: `./data/query.sh`
+To see a few indexed documents run: `./data/query.sh`
 
 At this point, you have the following containers running:
 
@@ -45,18 +45,20 @@ The Apache Flink job will be running and capturing hashtags and their counts. Th
 
 **This step needs implemented ----->** Read the trending hashtags from Redis.
 
-Now, update the indexed documents with a field (`classification_hashtag`) holding the classifier's score for the hashtag. In the example commands below, the hashtag is `christmas`.
+Now, update the indexed documents (movies) with a field containing the classifier's score for the hashtag. In the example commands below, the hashtag is `christmas`. This command updates all of the indexed documents by passing each document's (movie) summary to the zero-shot classifier along with the category (hashtag `christmas`). The result is a value between 0 and 1 indicating how well the model thinks the movie summary matches the category. (For example, the movie "Jingle all the Way" will likely get a score greater than 0.9 while the movie "Space Jam" will receive a much lower score.) A new field called `classification_christmas` is added to each document containing the value.
 
 ```
 cd data/
 ./update.sh localhost tmdb christmas
 ```
 
-Searches can now be sorted descending by the `classification_christmas` field.
+Now when we search we can sort the results descending by the `classification_christmas` field. Use the command below to run a search:
 
 ```
 ./data/query-sort-by-classification.sh localhost tmdb christmas
 ```
+
+The command above searches for movies matching the `Family` genre and sorts them by the `classification_christmas` field. This gives us a list of family movies with Christmas movies returned first. "Jingle all the Way" will be returned much earlier in the search results than "Space Jam."
 
 ### Model Training
 
