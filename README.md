@@ -6,6 +6,13 @@ In this talk we will present a containerized architecture to handle the full mac
 
 Attendees of this talk will come away with a working knowledge of how a machine learning pipeline can be constructed and managed inside Kubernetes. Knowledge of NLP is not required. All code presented will be available on GitHub.
 
+## About
+
+* [Jeff Zemerick](https://www.linkedin.com/in/jeffzemerick/)
+* David Smithbauer
+
+Licensed under the Apache License, version 2.0.
+
 ## Architecture
 
 ![Architecture](https://github.com/jzonthemtn/berlin-buzzwords-2021/blob/master/resources/arch.png?raw=true)
