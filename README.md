@@ -41,9 +41,13 @@ At this point, you have the following containers running:
 * `classifier` - A zero-shot learning classifier exposed through a REST service.
 * `redis` - Cache for storing hashtags and counts.
 
+### Capturing Hashtag Counts
+
 The Apache Flink job will be running and capturing hashtags and their counts. The hashtags and their counts will be sorted and the most frequently occurring hashtags and their counts will be persisted to the Redis cache.
 
 **This step needs implemented ----->** Read the trending hashtags from Redis.
+
+### Classifiying Movie Summaries using the Zero-Shot Classifier
 
 Now, update the indexed documents (movies) with a field containing the classifier's score for the hashtag. In the example commands below, the hashtag is `christmas`. This command updates all of the indexed documents by passing each document's (movie) summary to the zero-shot classifier along with the category (hashtag `christmas`). The result is a value between 0 and 1 indicating how well the model thinks the movie summary matches the category. (For example, the movie "Jingle all the Way" will likely get a score greater than 0.9 while the movie "Space Jam" will receive a much lower score.) A new field called `classification_christmas` is added to each document containing the value.
 
