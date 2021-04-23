@@ -75,16 +75,9 @@ The command above searches for movies matching the `Family` genre and sorts them
 
 The `nli-training` directory contains files needed to fine-tune an NLI model on BERT using the MNLI dataset. If you want to change the parameters of the training modify the `train.sh` script. Change to the `nli-training` directory and run `build.sh` to build the image. Now run the docker image to start training using the `run.sh` script. Model artifacts will be written to `./models/`.
 
-To use the model, modify `zero-shot-classifier/classifier.py` an change the name of the model to point to the directory containing the trained model. The model can then be uploaded to the [HuggingFace model hub](https://huggingface.co/welcome).
+To use the model, modify `zero-shot-classifier/classifier.py` an change the name of the model to point to the directory containing the trained model. The model can then be uploaded to the [HuggingFace model hub](https://huggingface.co/welcome) or version controlled with [DVC](https://dvc.org/).
 
-Clone the model repository:
-
-```
-git lfs install
-git clone https://huggingface.co/mtnfog/bbuzz-nli
-```
-
-Then set the environment variable to use the model in `classifier.py`.
+Then just set the environment variable in `docker-compose.yml` to use the model when running `classifier.py`.
 
 ## License
 
