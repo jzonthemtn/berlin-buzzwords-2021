@@ -1,6 +1,6 @@
-# Berlin Buzzwords 2021
+# Applied MLOps to Maintain Model Freshness on Kubernetes
 
-https://2021.berlinbuzzwords.de/session/applied-mlops-maintain-model-freshness-kubernetes
+This is the repository for the [Berlin Buzzwords 2021 talk](https://2021.berlinbuzzwords.de/session/applied-mlops-maintain-model-freshness-kubernetes).
 
 * [Jeff Zemerick](https://www.linkedin.com/in/jeffzemerick/)
 * David Smithbauer
