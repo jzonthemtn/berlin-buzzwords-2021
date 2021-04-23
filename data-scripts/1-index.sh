@@ -3,16 +3,14 @@
 HOST="${1:-localhost}"
 INDEX="${2:-tmdb}"
 
-if [ ! -f ./tmdb_es.json ]; then
-  unzip tmdb_es.json.zip
-fi
+# Unzip the movies to a temp directory.
+unzip -o tmdb_es.json.zip -d /tmp/tmdb_es
 
-# Delete and create the index.
+# Delete the index if it exists.
 curl -X DELETE "http://$HOST:9200/$INDEX"
+
+# Create the index.
 curl -X PUT "http://$HOST:9200/$INDEX/" -H "Content-Type: application/json" --data-binary @schema.json
 
 # Index the movies.
-curl -X POST "http://$HOST:9200/$INDEX/_bulk" -H "Content-Type: application/json" --data-binary @tmdb_es.json
-
-rm tmdb_dump_2020-12-29.json
-rm tmdb_es.json
+curl -X POST "http://$HOST:9200/$INDEX/_bulk" -H "Content-Type: application/json" --data-binary @/tmp/tmdb_es/tmdb_es.json
