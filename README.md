@@ -2,6 +2,9 @@
 
 https://2021.berlinbuzzwords.de/session/applied-mlops-maintain-model-freshness-kubernetes
 
+* [Jeff Zemerick](https://www.linkedin.com/in/jeffzemerick/)
+* David Smithbauer
+
 ## Abstract
 
 As machine learning becomes more pervasive across industries the need to automate the deployment of the required infrastructure becomes even more important. The ability to efficiently and automatically provision infrastructure for modeling training, evaluation, and serving becomes an important component of a successful ML pipeline. Combined with the ever growing popularity of Kubernetes, a full-cycle, containerized method for managing models is needed.
@@ -9,13 +12,6 @@ As machine learning becomes more pervasive across industries the need to automat
 In this talk we will present a containerized architecture to handle the full machine learning lifecycle of an NLP model. We will describe our technologies and tools used along with our lessons learned along the way. We will show how models can be trained, evaluated, and served in an automated fashion with room for extensibility to be customized for specific workloads.
 
 Attendees of this talk will come away with a working knowledge of how a machine learning pipeline can be constructed and managed inside Kubernetes. Knowledge of NLP is not required. All code presented will be available on GitHub.
-
-## About
-
-* [Jeff Zemerick](https://www.linkedin.com/in/jeffzemerick/)
-* David Smithbauer
-
-Licensed under the Apache License, version 2.0.
 
 ## Architecture
 
@@ -39,11 +35,11 @@ TOKEN_SECRET=
 4. Index movie documents in Elasticsearch:
 
 ```
-cd data/
-./index.sh localhost tmdb
+cd data-scripts/
+./1-index.sh localhost tmdb
 ```
 
-To see a few indexed documents run: `./data/query.sh`
+To see a few indexed documents run: `./data-scripts/3-query.sh`
 
 At this point, you have the following containers running:
 
@@ -63,14 +59,14 @@ The Apache Flink job will be running and capturing hashtags and their counts. Th
 Now, update the indexed documents (movies) with a field containing the classifier's score for the hashtag. In the example commands below, the hashtag is `christmas`. This command updates all of the indexed documents by passing each document's summary to the zero-shot classifier along with the category (hashtag `christmas`). The result is a value between `0` and `1` indicating how well the model thinks the movie summary matches the category. (For example, for the category `christmas` the movie "Jingle all the Way" will likely get a score greater than 0.9 while the movie "Space Jam" will receive a much lower score.) A new field called `classification_christmas` is added to each document containing the value.
 
 ```
-cd data/
-./update.sh localhost tmdb christmas
+cd data-scripts/
+./2-classify.sh localhost tmdb christmas
 ```
 
 Now when we search we can sort the results descending by the `classification_christmas` field. Use the command below to run a search:
 
 ```
-./data/query-sort-by-classification.sh localhost tmdb christmas
+./data-scripts/3-query-sort-by-classification.sh localhost tmdb christmas
 ```
 
 The command above searches for movies matching the `Family` genre and sorts them by the value in the `classification_christmas` field. This gives a list of search results which are family movies with Christmas movies returned first. "Jingle all the Way" will be returned much earlier in the search results than "Space Jam."
@@ -80,3 +76,7 @@ The command above searches for movies matching the `Family` genre and sorts them
 The `nli-training` directory contains files needed to fine-tune an NLI model on BERT using the MNLI dataset. If you want to change the parameters of the training modify the `train.sh` script. Change to the `nli-training` directory and run `build.sh` to build the image. Now run the docker image to start training using the `run.sh` script. Model artifacts will be written to `./models/`.
 
 To use the model, modify `zero-shot-classifier/classifier.py` an change the name of the model to point to the directory containing the trained model.
+
+## License
+
+Licensed under the Apache License, version 2.0.
