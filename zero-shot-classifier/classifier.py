@@ -1,12 +1,13 @@
 import cherrypy
 import json
+import os
 from transformers import pipeline
 
 
-# distilbert-base-uncased-finetuned-mnli
-#classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
-classifier = pipeline("zero-shot-classification", model="/home/jeff/berlin-buzzwords-2021/nli/models/MNLI/")
+MODEL = os.getenv('NLI_MODEL')
+print("Using model " + str(MODEL))
 
+classifier = pipeline("zero-shot-classification", model=MODEL)
 
 class Classifier(object):
 

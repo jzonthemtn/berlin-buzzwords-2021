@@ -12,6 +12,9 @@ services:
     build: ./zero-shot-classifier/
     ports:
       - "8080:8080"
+    environment:
+      - NLI_MODEL=facebook/bart-large-mnli
+      #- NLI_MODEL=/home/jeff/berlin-buzzwords-2021/nli/models/MNLI/
   elasticsearch:
     build: ./elasticsearch/
     ports:
