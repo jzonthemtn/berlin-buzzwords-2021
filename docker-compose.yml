@@ -8,17 +8,21 @@ services:
       - REDIS_HOST=redis
     depends_on:
       - "redis"
+    networks:
+      - elastic
   classifier:
     build: ./zero-shot-classifier/
     ports:
-      - "8080:8080"
+      - 8080:8080
     environment:
       - NLI_MODEL=facebook/bart-large-mnli
       #- NLI_MODEL=./nli/models/MNLI/
+    networks:
+      - elastic
   elasticsearch:
     build: ./elasticsearch/
     ports:
-      - "9200:9200"
+      - 9200:9200
     networks:
       - elastic
   kibana:
@@ -33,7 +37,15 @@ services:
   redis:
     image: "redis:alpine"
     ports:
-      - "6379:6379"
+      - 6379:6379
+    networks:
+      - elastic
+  redis-client:
+    build: ./redis-client/
+    depends_on:
+      - redis
+    networks:
+      - elastic
 networks:
   elastic:
     driver: bridge
