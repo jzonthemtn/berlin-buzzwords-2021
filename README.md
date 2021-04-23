@@ -1,5 +1,9 @@
 # Berlin Buzzwords 2021
 
+https://2021.berlinbuzzwords.de/session/applied-mlops-maintain-model-freshness-kubernetes
+
+## Abstract
+
 As machine learning becomes more pervasive across industries the need to automate the deployment of the required infrastructure becomes even more important. The ability to efficiently and automatically provision infrastructure for modeling training, evaluation, and serving becomes an important component of a successful ML pipeline. Combined with the ever growing popularity of Kubernetes, a full-cycle, containerized method for managing models is needed.
 
 In this talk we will present a containerized architecture to handle the full machine learning lifecycle of an NLP model. We will describe our technologies and tools used along with our lessons learned along the way. We will show how models can be trained, evaluated, and served in an automated fashion with room for extensibility to be customized for specific workloads.
@@ -52,11 +56,11 @@ At this point, you have the following containers running:
 
 The Apache Flink job will be running and capturing hashtags and their counts. The hashtags and their counts will be sorted and the most frequently occurring hashtags and their counts will be persisted to the Redis cache.
 
-**This step needs implemented ----->** Read the trending hashtags from Redis.
-
 ### Classifiying Movie Summaries using the Zero-Shot Classifier
 
-Now, update the indexed documents (movies) with a field containing the classifier's score for the hashtag. In the example commands below, the hashtag is `christmas`. This command updates all of the indexed documents by passing each document's (movie) summary to the zero-shot classifier along with the category (hashtag `christmas`). The result is a value between 0 and 1 indicating how well the model thinks the movie summary matches the category. (For example, the movie "Jingle all the Way" will likely get a score greater than 0.9 while the movie "Space Jam" will receive a much lower score.) A new field called `classification_christmas` is added to each document containing the value.
+**This step needs implemented ----->** Read the trending hashtags from Redis. Use the top `N` trending hashtags as the categories for the zero-shot-classifier.
+
+Now, update the indexed documents (movies) with a field containing the classifier's score for the hashtag. In the example commands below, the hashtag is `christmas`. This command updates all of the indexed documents by passing each document's summary to the zero-shot classifier along with the category (hashtag `christmas`). The result is a value between `0` and `1` indicating how well the model thinks the movie summary matches the category. (For example, for the category `christmas` the movie "Jingle all the Way" will likely get a score greater than 0.9 while the movie "Space Jam" will receive a much lower score.) A new field called `classification_christmas` is added to each document containing the value.
 
 ```
 cd data/
@@ -69,10 +73,10 @@ Now when we search we can sort the results descending by the `classification_chr
 ./data/query-sort-by-classification.sh localhost tmdb christmas
 ```
 
-The command above searches for movies matching the `Family` genre and sorts them by the `classification_christmas` field. This gives us a list of family movies with Christmas movies returned first. "Jingle all the Way" will be returned much earlier in the search results than "Space Jam."
+The command above searches for movies matching the `Family` genre and sorts them by the value in the `classification_christmas` field. This gives a list of search results which are family movies with Christmas movies returned first. "Jingle all the Way" will be returned much earlier in the search results than "Space Jam."
 
 ### Model Training
 
-The `nli` directory contains files needed to fine-tune a NLI model on BERT using the MNLI dataset. If you want to change the parameters of the training modify the `train.sh` script. Change to the `nli` directory and run `build.sh` to build the image.
+The `nli-training` directory contains files needed to fine-tune an NLI model on BERT using the MNLI dataset. If you want to change the parameters of the training modify the `train.sh` script. Change to the `nli-training` directory and run `build.sh` to build the image. Now run the docker image to start training using the `run.sh` script. Model artifacts will be written to `./models/`.
 
-Now run the docker image to start training using the `run.sh` script. Model artifacts will be written to `./models/`.
+To use the model, modify `zero-shot-classifier/classifier.py` an change the name of the model to point to the directory containing the trained model.
