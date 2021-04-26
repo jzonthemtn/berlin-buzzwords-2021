@@ -107,7 +107,7 @@ Get the first trending hashtag to a file (`./redis-client/get-hashtags.sh`):
 docker-compose run redis-client redis-cli -h redis -p 6379 ZREVRANGEBYSCORE hashtags +inf -inf | head -n 1 | sed 's/[0-9])//g' | tr -d ' "' > hashtags
 ```
 
-#### Use the Hashtags for the Classifier
+#### Use the Hashtags for the Classifier as Potential Categories
 
 Now we can use the top `N` trending hashtags as the categories for the zero-shot-classifier. You would probably want to run this step nightly or so based on your types of indexed documents and how much they are affected by trending hashtags.
 
