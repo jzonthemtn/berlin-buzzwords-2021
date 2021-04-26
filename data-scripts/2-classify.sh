@@ -8,6 +8,9 @@
 
 HOST="${1:-localhost}"
 INDEX="${2:-tmdb}"
+
+# Read the category from the file.
+#CATEGORY=$(head -n 1 ../redis-client/hashtags)
 CATEGORY="christmas"
 
 # Get all the indexed document IDs.
