@@ -1,4 +1,4 @@
-version: "3.3"
+version: "3.9"
 services:
   flink:
     build: ./flink-twitter/
@@ -46,6 +46,8 @@ services:
       - redis
     networks:
       - elastic
+    profiles:
+      - do_not_start
 networks:
   elastic:
     driver: bridge

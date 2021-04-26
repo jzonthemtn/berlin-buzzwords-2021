@@ -62,25 +62,25 @@ The commands below walk through how to read the trending hashtags from Redis usi
 First, test the connection to Redis with a `PING`.
 
 ```
-docker run -it --network="berlin-buzzwords-2021_elastic" berlin-buzzwords-2021_redis-client:latest redis-cli -h redis -p 6379 PING
+docker-compose run redis-client redis-cli -h redis -p 6379 PING
 ```
 
 Get all keys in the cache (there should be just one key called `hashtags`):
 
 ```
-docker run -it --network="berlin-buzzwords-2021_elastic" berlin-buzzwords-2021_redis-client:latest redis-cli -h redis -p 6379 --scan --pattern '*'
+docker-compose run redis-client redis-cli -h redis -p 6379 --scan --pattern '*'
 ```
 
 Now get the type of key `hashtags` (which is `zset`):
 
 ```
-docker run -it --network="berlin-buzzwords-2021_elastic" berlin-buzzwords-2021_redis-client:latest redis-cli -h redis -p 6379 TYPE hashtags
+docker-compose run redis-client redis-cli -h redis -p 6379 TYPE hashtags
 ```
 
 Get the top 3 most frequently occurring hashtags from the `hashtags`:
 
 ```
-docker run -it --network="berlin-buzzwords-2021_elastic" berlin-buzzwords-2021_redis-client:latest redis-cli -h redis -p 6379 ZREVRANGEBYSCORE hashtags +inf -inf | head -n 3
+docker-compose run redis-client redis-cli -h redis -p 6379 ZREVRANGEBYSCORE hashtags +inf -inf | head -n 3
 ```
 
 This will give output such as:
@@ -89,6 +89,12 @@ This will give output such as:
 1) "Transportation"
 2) "Sales"
 3) "Retail"
+```
+
+Get the first trending hashtag to a file:
+
+```
+docker-compose run redis-client redis-cli -h redis -p 6379 ZREVRANGEBYSCORE hashtags +inf -inf | head -n 1 | sed 's/[0-9])//g' | tr -d ' "' > hashtags
 ```
 
 #### Use the Hashtags for the Classifier
