@@ -115,7 +115,8 @@ public class FlinkTwitter {
 
                     while (matcher.find()) {
 
-                        final String cleanedHashtag = matcher.group(0).trim();
+                        // Get the tweet and remove #.
+                        final String cleanedHashtag = matcher.group(0).trim().replace("#", "");;
 
                         if (cleanedHashtag != null) {
                             out.collect(new Tuple2<>(cleanedHashtag, 1));
