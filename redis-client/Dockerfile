@@ -4,5 +4,3 @@ FROM ubuntu:20.04
 # redis-cli commands: https://redis.io/topics/rediscli
 
 RUN apt-get update && apt-get -y install redis-tools
-
-CMD ["redis-cli", "-h", "redis", "-p", "6379", "ping"]
