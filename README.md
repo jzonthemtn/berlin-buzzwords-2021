@@ -48,7 +48,9 @@ At this point, you have the following containers running:
 * `classifier` - A zero-shot learning classifier exposed through a REST service.
 * `redis` - Cache for storing hashtags and counts.
 
-### Model Training
+### NLI Model Training
+
+An NLI model must be trained (or use a pre-trained model) to classify indexed documents.
 
 The `nli-training` directory contains files needed to fine-tune an NLI model on BERT using the MNLI dataset. If you want to change the parameters of the training modify the `train.sh` script. Change to the `nli-training` directory and run `build.sh` to build the image. Now run the docker image to start training using the `run.sh` script. Model artifacts will be written to `./models/`.
 
