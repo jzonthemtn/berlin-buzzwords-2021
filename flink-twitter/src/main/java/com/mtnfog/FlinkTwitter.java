@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.twitter.hbc.core.endpoint.Location;
 import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint;
 import com.twitter.hbc.core.endpoint.StreamingEndpoint;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -104,7 +105,11 @@ public class FlinkTwitter {
                 final JsonNode jsonNode = mapper.readValue(tweet, JsonNode.class);
                 tweetString = jsonNode.get("text").textValue();
 
-                if (tweetString != null) {
+                if (StringUtils.isNotEmpty(tweetString)) {
+
+                    // TODO: Only match dictionary words or do some
+                    // other processing on the hashtag to extract
+                    // keywords from the hashtag.
 
                     final Matcher matcher = p.matcher(tweetString);
 
