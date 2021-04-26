@@ -48,6 +48,14 @@ At this point, you have the following containers running:
 * `classifier` - A zero-shot learning classifier exposed through a REST service.
 * `redis` - Cache for storing hashtags and counts.
 
+### Model Training
+
+The `nli-training` directory contains files needed to fine-tune an NLI model on BERT using the MNLI dataset. If you want to change the parameters of the training modify the `train.sh` script. Change to the `nli-training` directory and run `build.sh` to build the image. Now run the docker image to start training using the `run.sh` script. Model artifacts will be written to `./models/`.
+
+To use the model, modify `zero-shot-classifier/classifier.py` an change the name of the model to point to the directory containing the trained model. The model can then be uploaded to the [HuggingFace model hub](https://huggingface.co/welcome) or version controlled with [DVC](https://dvc.org/).
+
+Then just set the environment variable in `docker-compose.yml` to specify the model to use when running `classifier.py`.
+
 ### Capturing Hashtag Counts
 
 The Apache Flink job will be running and capturing hashtags and their counts. The hashtags and their counts will be sorted and the most frequently occurring hashtags and their counts will be persisted to the Redis cache.
@@ -115,14 +123,6 @@ Now when we search we can sort the results descending by the `classification_chr
 ```
 
 The command above searches for movies matching the `Family` genre and sorts them by the value in the `classification_christmas` field. This gives a list of search results which are family movies with Christmas movies returned first. "Jingle all the Way" will be returned much earlier in the search results than "Space Jam."
-
-### Model Training
-
-The `nli-training` directory contains files needed to fine-tune an NLI model on BERT using the MNLI dataset. If you want to change the parameters of the training modify the `train.sh` script. Change to the `nli-training` directory and run `build.sh` to build the image. Now run the docker image to start training using the `run.sh` script. Model artifacts will be written to `./models/`.
-
-To use the model, modify `zero-shot-classifier/classifier.py` an change the name of the model to point to the directory containing the trained model. The model can then be uploaded to the [HuggingFace model hub](https://huggingface.co/welcome) or version controlled with [DVC](https://dvc.org/).
-
-Then just set the environment variable in `docker-compose.yml` to use the model when running `classifier.py`.
 
 ## License
 
