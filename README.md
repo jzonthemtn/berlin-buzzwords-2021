@@ -41,12 +41,26 @@ cd data-scripts/
 
 To see a few indexed documents run: `./data-scripts/3-query.sh`
 
+5. Initialize the Quepid database:
+
+```
+docker-compose run --rm quepid bin/rake db:setup
+```
+
+6. Start Quepid:
+
+```
+docker-compose up quepid
+```
+
 At this point, you have the following containers running:
 
 * `flink-twitter` - Capturing counts of hashtags and persisting those counts in Redis.
 * `elasticsearch` - Elasticsearch.
 * `classifier` - A zero-shot learning classifier exposed through a REST service.
-* `redis` - Cache for storing hashtags and counts.
+* `quepid` - The [Quepid](https://github.com/o19s/quepid) search relevance tool.
+* `redis` - Cache for storing hashtag counts and by Quepid.
+* `mysql` - Used for Quepid's search relevance data storage
 
 ### NLI Model Training
 

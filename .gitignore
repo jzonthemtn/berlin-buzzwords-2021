@@ -3,3 +3,4 @@ target/
 venv/
 twitter.env
 hashtags
+volumes/
