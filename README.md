@@ -234,6 +234,8 @@ To assess the performance of the model, calculate the DCG for a "Family" search 
 
 Go through the results and correlate each document (by its ID) to the relevance score from the table above. This gives us a baseline DCG score that we can use to evaluate future models.
 
+**Important**: We are treating the table of documents as the only relevant documents. Any search result not included in the table will be assigned a relevance score of 0. This uses the assumption that a "Christmas" movie will have "christmas" somewhere in the description.
+
 ## License
 
 Licensed under the Apache License, version 2.0.
