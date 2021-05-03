@@ -140,6 +140,53 @@ Now when we search we can sort the results descending by the `classification_chr
 
 The command above searches for movies matching the `Family` genre and sorts them by the value in the `classification_christmas` field. This gives a list of search results which are family movies with Christmas movies returned first. "Jingle all the Way" will be returned much earlier in the search results than "Space Jam."
 
+## Search Quality Measurements
+
+Doing a faceted search for "Family" genre "christmas" movies gives 40 results. An ideal result is "Jingle All the Way." But some of the results are not less relevant to what we want. For instance, the movie "Savannah" (ID 207871) contains a character named "Christmas Moultrie" and is not a "christmas" movie. Other results may take place around the time of Christmas (such as "The Christmas Bunny"). The chart below captures those assigned relevance metrics to each returned document in order how each appeared in the search results.
+
+| Document ID      | Relevance |
+| ----------- | ----------- |
+| 13358      | 3       |
+| 77934   | 1        |
+| 237710   | 3        |
+| 26386   | 3        |
+| 141102   | 2        |
+| 26985   | 3        |
+| 51052   | 3        |
+| 9479   | 3        |
+| 360920   | 3        |
+| 74352   | 3        |
+| 289728   | 3        |
+| 771   | 3       |
+| 339543   | 3        |
+| 370071   | 3        |
+| 49852   | 3       |
+| 52055   | 3        |
+| 8871   | 3        |
+| 11395   | 3        |
+| 295884   | 3        |
+| 9279   | 3        |
+| 355547   | 3        |
+| 18147   | 2        |
+| 13673   | 3        |
+| 13378   | 3        |
+| 333348   | 3        |
+| 124601   | 2        |
+| 10437   | 3        |
+| 73191   | 3        |
+| 1585   | 3        |
+| 10719   | 3        |
+| 17037   | 2        |
+| 73961   | 2        |
+| 50652   | 3        |
+| 13767   | 3        |
+| 772   | 2        |
+| 17979   | 3        |
+| 245508   | 3        |
+| 311765   | 3        |
+| 207871   | 0        |
+| 32307   | 3        |
+
 ## License
 
 Licensed under the Apache License, version 2.0.
