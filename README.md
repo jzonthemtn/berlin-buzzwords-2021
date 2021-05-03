@@ -144,6 +144,31 @@ The command above searches for movies matching the `Family` genre and sorts them
 
 Doing a faceted search for "Family" genre "christmas" movies gives 40 results. An ideal result is "Jingle All the Way." But some of the results are not less relevant to what we want. For instance, the movie "Savannah" (ID 207871) contains a character named "Christmas Moultrie" and is not a "christmas" movie. Other results may take place around the time of Christmas (such as "The Christmas Bunny"). The chart below captures those assigned relevance metrics to each returned document in order how each appeared in the search results.
 
+The search:
+
+```
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "genres": "Family"
+          }
+        },
+        {
+          "match": {
+            "overview": "christmas"
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+The relevance scores:
+
 | Document ID      | Relevance |
 | ----------- | ----------- |
 | 13358      | 3       |
@@ -186,6 +211,28 @@ Doing a faceted search for "Family" genre "christmas" movies gives 40 results. A
 | 311765   | 3        |
 | 207871   | 0        |
 | 32307   | 3        |
+
+To assess the performance of the model, calculate the DCG for a "Family" search sorted on the `category_christmas` field. Run the following search:
+
+```
+{
+  "_source": true,
+  "sort": [
+    {
+      "classification_christmas" : {
+        "order" : "desc"
+      }
+    }
+  ],
+  "query": {
+    "match": {
+      "genres": "Family"
+    }
+  }
+}
+```
+
+Go through the results and correlate each document (by its ID) to the relevance score from the table above. This gives us a baseline DCG score that we can use to evaluate future models.
 
 ## License
 
