@@ -142,7 +142,7 @@ The command above searches for movies matching the `Family` genre and sorts them
 
 ## Search Quality Measurements
 
-Doing a faceted search for "Family" genre "christmas" movies gives 40 results. An ideal result is "Jingle All the Way." But some of the results are not less relevant to what we want. For instance, the movie "Savannah" (ID 207871) contains a character named "Christmas Moultrie" and is not a "christmas" movie. Other results may take place around the time of Christmas (such as "The Christmas Bunny"). The chart below captures those assigned relevance metrics to each returned document in order how each appeared in the search results.
+Doing a faceted search for "Family" genre "christmas" movies gives 40 results. An ideal result is "Jingle All the Way." But some of the results are not less relevant to what we want. For instance, the movie "Savannah" (ID 207871) contains a character named "Christmas Moultrie" and is not a "christmas" movie. Other results may take place around the time of Christmas (such as "The Christmas Bunny").
 
 The search:
 
@@ -167,7 +167,7 @@ The search:
 }
 ```
 
-The relevance scores:
+ The chart below captures those assigned relevance metrics to each returned document in order how each appeared in the search results. These relevance scores are also captured in `judgments.csv` and `judgments.sql` for easy importing into a database.
 
 | Document ID      | Relevance |
 | ----------- | ----------- |
