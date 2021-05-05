@@ -41,13 +41,21 @@ cd data-scripts/
 
 To see a few indexed documents run: `./data-scripts/3-query.sh`
 
-5. Initialize the Quepid database:
+5. Load the relevance rankings into the MySQL database. Run the script `./data-scripts/load-judgments.sh` or the command below.
+
+```
+docker-compose run mysql mysql -u root --password=password -h mysql < judgments.sql
+```
+
+**Do the following steps if you want to tinker with search relevance. Otherwise just skip the next two steps.**
+
+6. Initialize the Quepid database:
 
 ```
 docker-compose run --rm quepid bin/rake db:setup
 ```
 
-6. Start Quepid:
+7. Start Quepid.
 
 ```
 docker-compose up quepid

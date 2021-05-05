@@ -49,7 +49,6 @@ services:
     profiles:
       - do_not_start
   mysql:
-    #container_name: quepid_prod_db
     image: mysql:5.6.37
     ports:
       - 3306:3306
@@ -58,14 +57,11 @@ services:
     volumes:
       - ./volumes/mysql_data:/var/lib/mysql
     networks:
-      - elastic      
+      - elastic
   quepid:
-    #container_name: quepid_prod_app
     image: o19s/quepid:latest
     profiles:
       - do_not_start
-    #env_file:   # Use this approach if you would rather manage your environment settings elsewhere.
-    #  - .env.prod
     environment:
       - PORT=3000
       - RACK_ENV=production
