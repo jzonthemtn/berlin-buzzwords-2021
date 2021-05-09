@@ -58,6 +58,10 @@ services:
       - ./volumes/mysql_data:/var/lib/mysql
     networks:
       - elastic
+  score-calculator:
+    build: ./score-calculator/
+    profiles:
+      - do_not_start
   quepid:
     image: o19s/quepid:latest
     profiles:
