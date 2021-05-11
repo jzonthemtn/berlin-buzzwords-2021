@@ -175,50 +175,7 @@ The search:
 }
 ```
 
- The chart below captures those assigned relevance metrics to each returned document in order how each appeared in the search results. These relevance scores are also captured in `judgments.csv` and `judgments.sql` for easy importing into a database.
-
-| Document ID      | Relevance |
-| ----------- | ----------- |
-| 13358      | 3       |
-| 77934   | 1        |
-| 237710   | 3        |
-| 26386   | 3        |
-| 141102   | 2        |
-| 26985   | 3        |
-| 51052   | 3        |
-| 9479   | 3        |
-| 360920   | 3        |
-| 74352   | 3        |
-| 289728   | 3        |
-| 771   | 3       |
-| 339543   | 3        |
-| 370071   | 3        |
-| 49852   | 3       |
-| 52055   | 3        |
-| 8871   | 3        |
-| 11395   | 3        |
-| 295884   | 3        |
-| 9279   | 3        |
-| 355547   | 3        |
-| 18147   | 2        |
-| 13673   | 3        |
-| 13378   | 3        |
-| 333348   | 3        |
-| 124601   | 2        |
-| 10437   | 3        |
-| 73191   | 3        |
-| 1585   | 3        |
-| 10719   | 3        |
-| 17037   | 2        |
-| 73961   | 2        |
-| 50652   | 3        |
-| 13767   | 3        |
-| 772   | 2        |
-| 17979   | 3        |
-| 245508   | 3        |
-| 311765   | 3        |
-| 207871   | 0        |
-| 32307   | 3        |
+The manual relevance scores are captured in `judgments.csv` and `judgments.sql` for easy importing into a database.
 
 To assess the performance of the model, calculate the DCG for a "Family" search sorted on the `category_christmas` field. Run the following search:
 
