@@ -36,7 +36,7 @@ public class ScoreCalculator {
 	@Bean
 	public CommandLineRunner calculate(ApplicationArguments args, JudgmentsRepository repository) {
 
-		final String searchTerm = "christmas"; //args.getNonOptionArgs().get(0);
+		final String term = "christmas"; //args.getNonOptionArgs().get(0);
 		//System.out.println("Using search term: " + searchTerm);
 
 		return (result) -> {
@@ -46,7 +46,8 @@ public class ScoreCalculator {
 							new HttpHost("elasticsearch", 9200, "http")));
 
 			final SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-			searchSourceBuilder.query(QueryBuilders.matchQuery("overview", searchTerm));
+			searchSourceBuilder.query(QueryBuilders.matchQuery("genres", "Family"));
+			searchSourceBuilder.sort("classification_" + term);
 			searchSourceBuilder.size(10);
 
 			SearchRequest searchRequest = new SearchRequest();
