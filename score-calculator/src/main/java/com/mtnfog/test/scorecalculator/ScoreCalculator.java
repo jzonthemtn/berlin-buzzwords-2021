@@ -58,7 +58,7 @@ public class ScoreCalculator {
 
 			System.out.println("Search results: " + response.getHits().getTotalHits().value);
 
-			Gson gson = new GsonBuilder().create();
+			final Gson gson = new GsonBuilder().create();
 
 			final List<Integer> ids = new LinkedList<>();
 
@@ -98,6 +98,8 @@ public class ScoreCalculator {
 
 			System.out.println("DCG: " + dcgScore);
 			System.out.println("NDCG: " + ndcgScore);
+
+			// TODO: Output the results as a JSON object.
 
 		};
 
