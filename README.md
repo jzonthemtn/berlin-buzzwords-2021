@@ -247,10 +247,10 @@ Go through the results and correlate each document (by its ID) to the relevance 
 To test a model by evaluating the search scores, deploy the model, update the indexed documents using the model, and then run:
 
 ```
-docker-compose run score-calculator [term]
+docker-compose run score-calculator
 ```
 
-This command executes a search with the given term and calculates the N/DCG score using the search results and the judgments in the database.
+This command executes a search with a term (currently set in the Java project) and calculates the N/DCG score using the search results and the judgments in the database. You can use this score to compare the performance of your model iterations over time.
 
 ## License
 

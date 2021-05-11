@@ -1,8 +1,11 @@
 package com.mtnfog.test.scorecalculator;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mtnfog.test.scorecalculator.model.Judgment;
 import com.mtnfog.test.scorecalculator.repositories.JudgmentsRepository;
 import com.mtnfog.test.scorecalculator.scoring.DCG;
+import com.mtnfog.test.scorecalculator.scoring.NDCG;
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -12,38 +15,38 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 @SpringBootApplication
 public class ScoreCalculator {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ScoreCalculator.class);
+		System.exit(0);
 	}
 
 	@Bean
-	public CommandLineRunner demo(JudgmentsRepository repository) {
+	public CommandLineRunner calculate(ApplicationArguments args, JudgmentsRepository repository) {
 
-		final DCG dcg = new DCG();
+		final String searchTerm = "christmas"; //args.getNonOptionArgs().get(0);
+		//System.out.println("Using search term: " + searchTerm);
 
-		return (args) -> {
+		return (result) -> {
 
 			final RestHighLevelClient client = new RestHighLevelClient(
 					RestClient.builder(
 							new HttpHost("elasticsearch", 9200, "http")));
 
-			final List<Integer> ids = new LinkedList<>();
-
 			final SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-			searchSourceBuilder.query(QueryBuilders.matchQuery("overview", "christmas"));
+			searchSourceBuilder.query(QueryBuilders.matchQuery("overview", searchTerm));
 			searchSourceBuilder.size(10);
 
 			SearchRequest searchRequest = new SearchRequest();
@@ -55,10 +58,18 @@ public class ScoreCalculator {
 
 			System.out.println("Search results: " + response.getHits().getTotalHits().value);
 
+			Gson gson = new GsonBuilder().create();
+
+			final List<Integer> ids = new LinkedList<>();
+
 			for(final SearchHit hit : searchHits) {
 
-				System.out.println("Search result document ID: " + hit.docId());
-				ids.add(hit.docId());
+				String jsonString=hit.getSourceAsString();
+
+				final Map jsonMap = gson.fromJson(jsonString, Map.class);
+				final int id = Integer.valueOf((String) jsonMap.get("id"));
+
+				ids.add(id);
 
 			}
 
@@ -79,9 +90,14 @@ public class ScoreCalculator {
 
 			}
 
-			final double score = dcg.calculate(judgments, 10);
+			final DCG dcg = new DCG();
+			final double dcgScore = dcg.calculate(judgments, 10);
 
-			System.out.println("Score: " + score);
+			final NDCG ndcg = new NDCG();
+			final double ndcgScore = ndcg.calculate(judgments, 10);
+
+			System.out.println("DCG: " + dcgScore);
+			System.out.println("NDCG: " + ndcgScore);
 
 		};
 
