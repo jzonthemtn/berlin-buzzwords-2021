@@ -32,7 +32,7 @@ TOKEN_SECRET=
 ```
 
 3. Run `docker-compose up`
-4. Index movie documents in Elasticsearch:
+4. Once the containers are up, index movie documents in Elasticsearch:
 
 ```
 cd data-scripts/
@@ -243,6 +243,14 @@ To assess the performance of the model, calculate the DCG for a "Family" search 
 Go through the results and correlate each document (by its ID) to the relevance score from the table above. This gives us a baseline DCG score that we can use to evaluate future models.
 
 **Important**: We are treating the table of documents as the only relevant documents. Any search result not included in the table will be assigned a relevance score of 0. This uses the assumption that a "Christmas" movie will have "christmas" somewhere in the description.
+
+To test a model by evaluating the search scores, deploy the model, update the indexed documents using the model, and then run:
+
+```
+docker-compose run score-calculator [term]
+```
+
+This command executes a search with the given term and calculates the N/DCG score using the search results and the judgments in the database.
 
 ## License
 

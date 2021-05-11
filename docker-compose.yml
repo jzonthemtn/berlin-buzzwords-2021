@@ -62,6 +62,11 @@ services:
     build: ./score-calculator/
     profiles:
       - do_not_start
+    networks:
+      - elastic
+    links:
+      - mysql
+      - elasticsearch
   quepid:
     image: o19s/quepid:latest
     profiles:

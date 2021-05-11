@@ -1,21 +1,19 @@
 package com.mtnfog.test.scorecalculator.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "judgments")
 public class Judgment {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long documentId;
 	private int relevance;
 
-	protected Judgment(
+	protected Judgment(	) {
 
-	) {}
+	}
 
 	public Judgment(long documentId, int relevance) {
 		this.documentId = documentId;
