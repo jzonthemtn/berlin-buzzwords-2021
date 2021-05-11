@@ -177,7 +177,7 @@ The search:
 
 The manual relevance scores are captured in `judgments.csv` and `judgments.sql` for easy importing into a database.
 
-To assess the performance of the model, calculate the DCG for a "Family" search sorted on the `category_christmas` field. Run the following search:
+To assess the performance of the model, we can calculate the N/DCG for a "Family" search sorted on the `category_christmas` field. Run the following search:
 
 ```
 {
@@ -201,13 +201,13 @@ Go through the results and correlate each document (by its ID) to the relevance 
 
 **Important**: We are treating the table of documents as the only relevant documents. Any search result not included in the table will be assigned a relevance score of 0. This uses the assumption that a "Christmas" movie will have "christmas" somewhere in the description.
 
-To test a model by evaluating the search scores, deploy the model, update the indexed documents using the model, and then run:
+To automate the scoring process described above just run:
 
 ```
 docker-compose run score-calculator
 ```
 
-This command executes a search with a term (currently set in the Java project) and calculates the N/DCG score using the search results and the judgments in the database. You can use this score to compare the performance of your model iterations over time.
+This command executes a search with a term (currently set in the Java project) and calculates the N/DCG score using the search results and the judgments in the database. You can use this score to compare the performance of your model iterations over time. (Train model, deploy it, update indexed documents, run the score-calculator to evaluate the model's performance by comparing it to the baseline score.)
 
 ## License
 
