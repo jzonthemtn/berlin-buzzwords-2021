@@ -3,6 +3,7 @@ package com.mtnfog.test.scorecalculator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mtnfog.test.scorecalculator.model.Judgment;
+import com.mtnfog.test.scorecalculator.model.Score;
 import com.mtnfog.test.scorecalculator.repositories.JudgmentsRepository;
 import com.mtnfog.test.scorecalculator.scoring.DCG;
 import com.mtnfog.test.scorecalculator.scoring.NDCG;
@@ -57,7 +58,7 @@ public class ScoreCalculator {
 			final SearchResponse response = client.search(searchRequest, RequestOptions.DEFAULT);
 			final SearchHit[] searchHits = response.getHits().getHits();
 
-			System.out.println("Search results: " + response.getHits().getTotalHits().value);
+			//System.out.println("Search results: " + response.getHits().getTotalHits().value);
 
 			final Gson gson = new GsonBuilder().create();
 
@@ -87,7 +88,7 @@ public class ScoreCalculator {
 
 				judgments.add(judgment);
 
-				System.out.println("Search result document ID: " + id + ", Relevance: " + judgment.getRelevance());
+				//System.out.println("Search result document ID: " + id + ", Relevance: " + judgment.getRelevance());
 
 			}
 
@@ -97,10 +98,11 @@ public class ScoreCalculator {
 			final NDCG ndcg = new NDCG();
 			final double ndcgScore = ndcg.calculate(judgments, 10);
 
-			System.out.println("DCG: " + dcgScore);
-			System.out.println("NDCG: " + ndcgScore);
+			//System.out.println("DCG: " + dcgScore);
+			//System.out.println("NDCG: " + ndcgScore);
 
-			// TODO: Output the results as a JSON object.
+			final Score score = new Score(dcgScore, ndcgScore);
+			System.out.println(gson.toJson(score));
 
 		};
 
