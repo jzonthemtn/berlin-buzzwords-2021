@@ -15,7 +15,7 @@ Attendees of this talk will come away with a working knowledge of how a machine 
 
 ## Architecture
 
-![Architecture](https://github.com/jzonthemtn/berlin-buzzwords-2021/blob/master/resources/arch.png?raw=true)
+![Architecture](https://github.com/jzonthemtn/berlin-buzzwords-2021/blob/master/arch.png?raw=true)
 
 ## Usage
 
