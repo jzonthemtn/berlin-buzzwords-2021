@@ -21,7 +21,7 @@ Attendees of this talk will come away with a working knowledge of how a machine 
 
 In the commands below, `localhost` is where Elasticsearch is running and `tmdb` is the name of the index.
 
-1. Run `docker-compose build`
+1. Run the `build.sh` script to build the Java (Maven) projects and the docker images.
 2. Create a `twitter.env` file with your Twitter credentials like:
 
 ```
@@ -32,16 +32,16 @@ TOKEN_SECRET=
 ```
 
 3. Run `docker-compose up`
-4. Once the containers are up, index movie documents in Elasticsearch:
+4. Once the containers are up, we can index some movie documents in Elasticsearch:
 
 ```
 cd data-scripts/
 ./1-index.sh localhost tmdb
 ```
 
-To see a few indexed documents run: `./data-scripts/3-query.sh`
+`localhost` is the address of Elasticsearch and `tmdb` is the name of the Elasticsearch index. To see a few indexed documents run: `./data-scripts/3-query.sh`
 
-5. Load the relevance rankings into the MySQL database. Run the script `./data-scripts/load-judgments.sh` or the command below.
+5. Load the relevance rankings into the MySQL database. Run the script `load-judgments.sh` script or the command below.
 
 ```
 docker-compose run mysql mysql -u root --password=password -h mysql < judgments.sql
@@ -70,22 +70,23 @@ At this point, you have the following containers running:
 * `redis` - Cache for storing hashtag counts and by Quepid.
 * `mysql` - Used for Quepid's search relevance data storage
 
-### NLI Model Training
+### NLI Model Training and Inference
 
 An NLI model must be trained (or use a pre-trained model) to classify indexed documents.
 
-The `nli-training` directory contains files needed to fine-tune an NLI model on BERT using the MNLI dataset. If you want to change the parameters of the training modify the `train.sh` script. Change to the `nli-training` directory and run `build.sh` to build the image. Now run the docker image to start training using the `run.sh` script. Model artifacts will be written to `./models/`.
+The `nli-training` directory contains files needed to fine-tune an NLI model on BERT using the MNLI dataset. If you want to change the parameters of the training modify the `train.sh` script. Change to the `nli-training` directory and run `build.sh` to build the image. Now run the docker image to start training using the `run-image.sh` script. Model artifacts will be written to `./models/`.
 
-To use the model, modify `zero-shot-classifier/classifier.py` an change the name of the model to point to the directory containing the trained model. The model can then be uploaded to the [HuggingFace model hub](https://huggingface.co/welcome) or version controlled with [DVC](https://dvc.org/).
+To use the model, modify `zero-shot-classifier/classifier.py` to change the name of the model to point to the directory containing the trained model. The model can then be uploaded to the [HuggingFace model hub](https://huggingface.co/welcome), version controlled with [DVC](https://dvc.org/), or stored somewhere else.
 
-Then just set the environment variable in `docker-compose.yml` to specify the model to use when running `classifier.py`.
+Lastly, set the environment variable in `docker-compose.yml` to specify the model for the `classifier` container. (You can use your own model or any model available through the HuggingFace model hub.)
+
+### Classifiying Movie Summaries using the Zero-Shot Classifier
+
+TODO:
 
 ### Capturing Hashtag Counts
 
 The Apache Flink job will be running and capturing hashtags and their counts. The hashtags and their counts will be sorted and the most frequently occurring hashtags and their counts will be persisted to the Redis cache.
-
-### Classifiying Movie Summaries using the Zero-Shot Classifier
-
 
 #### Get Trending Hashtags from the Cache
 
