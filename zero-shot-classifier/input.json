@@ -1,0 +1,10 @@
+{
+  "instances": [{
+    "sequence": "Golf is fun.",
+    "labels": [
+      "golf",
+      "cheeseburger",
+      "car"
+    ]
+  }]
+}

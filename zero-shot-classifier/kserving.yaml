@@ -1,0 +1,18 @@
+apiVersion: serving.kubeflow.org/v1alpha2
+kind: InferenceService
+metadata:
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: zero-shot-learning
+spec:
+  default:
+    predictor:
+      custom:
+        container:
+          name: zero-shot-learning
+          image: jzemerick/bbuzz-zero-shot:1.0
+          resources:
+            requests:
+              memory: "8096Mi"
+            limits:
+              memory: "8096Mi"
