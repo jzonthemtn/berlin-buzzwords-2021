@@ -10,7 +10,7 @@ MODEL = os.getenv('NLI_MODEL')
 print("Using model " + str(MODEL))
 classifier = pipeline("zero-shot-classification", model=MODEL)
 
-class KFServing_BERT_QA_Model(kfserving.KFModel):
+class KFServing_ZSC(kfserving.KFModel):
     def __init__(self, name: str):
         super().__init__(name)
         self.name = name
@@ -30,6 +30,6 @@ class KFServing_BERT_QA_Model(kfserving.KFModel):
 
 
 if __name__ == "__main__":
-    model = KFServing_BERT_QA_Model("zero-shot-classifier")
+    model = KFServing_ZSC("zero-shot-classifier")
     model.load()
     kfserving.KFServer(workers=1).start([model])
