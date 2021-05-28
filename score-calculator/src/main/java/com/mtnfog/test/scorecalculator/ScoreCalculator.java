@@ -66,7 +66,7 @@ public class ScoreCalculator {
 
 			for(final SearchHit hit : searchHits) {
 
-				String jsonString=hit.getSourceAsString();
+				final String jsonString = hit.getSourceAsString();
 
 				final Map jsonMap = gson.fromJson(jsonString, Map.class);
 				final int id = Integer.valueOf((String) jsonMap.get("id"));
