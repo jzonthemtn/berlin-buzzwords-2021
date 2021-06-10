@@ -13,6 +13,10 @@ In this talk we will present a containerized architecture to handle the full mac
 
 Attendees of this talk will come away with a working knowledge of how a machine learning pipeline can be constructed and managed inside Kubernetes. Knowledge of NLP is not required. All code presented will be available on GitHub.
 
+## Summary
+
+Ingest tweets, determine trending hashtags, sort movie search results based on trending hashtags. Classification of movie overviews is done by a zero-shot classifier. Includes tools for training and deploying NLI model, managing search relevance scoring, and data ingest.
+
 ## Architecture
 
 ![Architecture](https://github.com/jzonthemtn/berlin-buzzwords-2021/blob/master/arch.png?raw=true)
