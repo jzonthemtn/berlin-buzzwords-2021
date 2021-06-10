@@ -21,4 +21,4 @@ read -r -d '' BODY << EOM
 }
 EOM
 
-curl -s -X POST http://$HOST:9200/$INDEX/_search -H "Content-Type: application/json; charset=utf-8" --data "$BODY" | jq
+curl -s -X POST http://$HOST:9200/$INDEX/_search -H "Content-Type: application/json; charset=utf-8" --data "$BODY"

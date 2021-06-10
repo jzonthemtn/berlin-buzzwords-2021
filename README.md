@@ -80,11 +80,7 @@ To use the model, modify `zero-shot-classifier/classifier.py` to change the name
 
 Lastly, set the environment variable in `docker-compose.yml` to specify the model for the `classifier` container. (You can use your own model or any model available through the HuggingFace model hub.)
 
-### Classifiying Movie Summaries using the Zero-Shot Classifier
-
-TODO:
-
-### Capturing Hashtag Counts
+### Capturing Trending Hashtag Counts
 
 The Apache Flink job will be running and capturing hashtags and their counts. The hashtags and their counts will be sorted and the most frequently occurring hashtags and their counts will be persisted to the Redis cache.
 

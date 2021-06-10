@@ -1,35 +1,30 @@
-import kfserving
-from typing import List, Dict
-import base64
-import io
+import cherrypy
+import json
 import os
 from transformers import pipeline
 
 
 MODEL = os.getenv('NLI_MODEL')
 print("Using model " + str(MODEL))
+
 classifier = pipeline("zero-shot-classification", model=MODEL)
 
-class KFServing_ZSC(kfserving.KFModel):
-    def __init__(self, name: str):
-        super().__init__(name)
-        self.name = name
-        self.ready = False
+class Classifier(object):
 
-    def load(self):
-        self.ready = True
+    @cherrypy.expose
+    @cherrypy.tools.json_in()
+    @cherrypy.tools.json_out()
+    def classify(self):
 
-    def predict(self, request: Dict) -> Dict:
-
-        inputs = request["instances"]
-        sequence = inputs[0]["sequence"]
-        candidate_labels = inputs[0]["labels"]
+        sequence = cherrypy.request.json['sequence']
+        candidate_labels = cherrypy.request.json['labels']
 
         return classifier(sequence, candidate_labels, multi_class=True)
 
+    @cherrypy.expose
+    def status(self):
+      return "alive"
 
-
-if __name__ == "__main__":
-    model = KFServing_ZSC("zero-shot-classifier")
-    model.load()
-    kfserving.KFServer(workers=1).start([model])
+if __name__ == '__main__':
+    cherrypy.config.update({'server.socket_host': '0.0.0.0', 'server.socket_port': 8080})
+    cherrypy.quickstart(Classifier())
