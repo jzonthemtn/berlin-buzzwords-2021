@@ -15,7 +15,7 @@ Attendees of this talk will come away with a working knowledge of how a machine 
 
 ## Summary
 
-Ingest tweets, determine trending hashtags, sort movie search results based on trending hashtags. Classification of movie overviews is done by a zero-shot classifier. Includes tools for training and deploying NLI model, managing search relevance scoring, and data ingest.
+This project ingests tweets, determines trending hashtags, and sorts movie search results based on trending hashtags. The classification of movie overviews is done by a zero-shot classifier. The repository includes tools for training and deploying NLI model, managing search relevance scoring, and data ingest. Follow the steps outlined below to try it out.
 
 ## Architecture
 
