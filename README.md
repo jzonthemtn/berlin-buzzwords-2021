@@ -3,7 +3,7 @@
 This is the repository for the [Berlin Buzzwords 2021 talk](https://2021.berlinbuzzwords.de/session/applied-mlops-maintain-model-freshness-kubernetes).
 
 * [Jeff Zemerick](https://www.linkedin.com/in/jeffzemerick/)
-* David Smithbauer
+* [David Smithbauer](https://www.linkedin.com/in/davidsmithbauer/)
 
 ## Abstract
 
