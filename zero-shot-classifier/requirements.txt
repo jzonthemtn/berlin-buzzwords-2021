@@ -12,7 +12,7 @@ jaraco.text==3.5.0
 joblib==1.0.1
 kfserving==0.5.1
 more-itertools==8.7.0
-numpy==1.20.2
+numpy==1.21.0
 packaging==20.9
 portend==2.7.1
 pyparsing==2.4.7
